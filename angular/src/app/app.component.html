@@ -1,0 +1,11 @@
+<body>
+    <textarea [(ngModel)]='room'></textarea>
+    <br>
+    <button (click)="joinroom()">Join</button>
+    <button (click)="leaveroom()">Leave</button>
+    <br>
+    <textarea [(ngModel)]='text'></textarea>
+    <br>
+    <button (click)="sendmsg()">Send</button>
+    {{recievedMessages}}
+</body>

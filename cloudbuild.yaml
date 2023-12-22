@@ -1,0 +1,27 @@
+steps:
+- name: 'node:lts-alpine3.12'
+  entrypoint: 'npm'
+  args: ['install']
+  dir: 'angular'
+- name: 'node:lts-alpine3.12'
+  entrypoint: 'npm'
+  args: ['run','build']
+  dir: 'angular'
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/websockettest:$COMMIT_SHA', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'gcr.io/$PROJECT_ID/websockettest:$COMMIT_SHA']
+- name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+  entrypoint: gcloud
+  args:
+  - 'run'
+  - 'deploy'
+  - 'websockettest'
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/websockettest:$COMMIT_SHA'
+  - '--vpc-connector'
+  - 'redis-connector-2'
+  - '--region'
+  - 'us-central1'
+images:
+- 'gcr.io/$PROJECT_ID/websockettest:$COMMIT_SHA'
